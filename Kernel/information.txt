@@ -1,0 +1,25 @@
+SystemCalls:
+     Read:
+    Rax en 3 para llamarla, en Rbx el fd de donde leer, en rcx un buffer donde se deja lo leido y en rdx la longitud que
+    quiere leer. El sistema solo permite leer de teclado (fd 0), sin embargo está diseñada de manera tal que sea posible
+    en un futuro agregar más fds.
+    Write:
+    Rax en 4 para llamarla, en Rbx espera el string, en rcx la longitud del mismo y en rcx el file descriptor
+    El sistema solo permite manejo de pantalla (fd en 0), sin embargo está diseñada de manera tal que sea posible
+    en un futuro agregar más fds.
+    SetConsole:
+    Rax en 5 para llamarla, en Rbx se le indica con 0(ventana a) o 1(ventana b) que consola se busca activar. Si se le pasa otro paramtro, no hace
+    nada.
+    GetTime:
+    Rax en 6 para llamarla, en rbx se deja el char que se le pasara al rtc y asi poder pedir distintos valores. Se encarga de
+    parsear los valores( vienen en BCD del RTC). En rcx espera la direccion de una variable donde deja el valor pedido
+    initConsoles
+    Rax en 7 para llamarla
+    GetTemperature:
+    Rax en 9 para llamarla, en rbx se deja un int referente a la temperatura de la CPU.
+    GetRegistersData:
+    Rax en 10 para llamarla, espera en rbx un buffer donde deja la informacion de los registros
+
+Decisiones de implementacion:
+    Se decidió que al presionar teclas se almacenen en buffer de teclado, y sea luego desde el userpace donde se genere el buffer
+    por consola. Tambien con respecto al cambio de consolas, la combinacion de teclas la detecta el driver del teclado, pero tambien el userspace necesita estar al tanto. Por lo tanto se opto por tomar los chars 0x01 y 0x02 como representacion de un cambio de consola.
